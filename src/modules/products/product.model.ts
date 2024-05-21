@@ -21,7 +21,7 @@ const productSchema = new Schema<Product>({
   name: {
     type: String,
     required: true,
-    maxlength: 20,
+    maxlength: 100,
   },
   description: {
     type: String,
@@ -29,7 +29,7 @@ const productSchema = new Schema<Product>({
     maxlength: 100,
   },
   price: {
-    type: String,
+    type: Number,
     required: true,
   },
   category: {
@@ -45,7 +45,10 @@ const productSchema = new Schema<Product>({
     type: [variantSchema],
     required: true,
   },
-  inventory: inventorySchema,
+  inventory: {
+    type: inventorySchema,
+    required: true,
+  },
 });
 
 export const ProductModel = model<Product>(

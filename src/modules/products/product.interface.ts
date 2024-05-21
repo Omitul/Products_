@@ -8,10 +8,10 @@ export type Inventory = {
   inStock: boolean;
 };
 
-export type Student = {
+export type Product = {
   name: string;
   description: string;
-  price: string;
+  price: number;
   category: string;
   tags: string[];
   variant: Variant[];

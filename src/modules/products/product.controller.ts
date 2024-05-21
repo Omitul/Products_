@@ -1,17 +1,15 @@
 import { Request, Response } from 'express';
 import { ProductServices } from './product.service';
-import ProductZodSchema from './product.validationZod';
+import productJoiSchema from './product.validationJoi';
 
 const CreateProduct = async (req: Request, res: Response) => {
   try {
-    const { product: productData } = req.body;
-    console.log(req.body);
+    const productData = req.body;
 
-    //const zodParsedData = ProductZodSchema.parse(req.body);
-    console.log('ekhane ashe nai?');
+    const { value: JoiParsedData, error } =
+      productJoiSchema.validate(productData);
 
-    const result = await ProductServices.createProductIntoDB(req.body);
-    console.log('etai');
+    const result = await ProductServices.createProductIntoDB(JoiParsedData);
 
     //send response
 
@@ -20,12 +18,12 @@ const CreateProduct = async (req: Request, res: Response) => {
       message: 'product is created successfully',
       data: result,
     });
-  } catch (err: any) {
+  } catch (error: any) {
     console.log('ahare');
     res.status(500).json({
       success: false,
       message: 'failed to create student',
-      error: err.message,
+      error: error.message,
     });
   }
 };
