@@ -2,15 +2,22 @@ import { Product } from './product.interface';
 import { ProductModel } from './product.model';
 
 const createProductIntoDB = async (productData: Product) => {
-  try {
-    const result = await ProductModel.create(productData);
-    return result;
-  } catch (error) {
-    console.error('Error creating product:', error);
-    throw error;
+  const result = await ProductModel.create(productData);
+  return result;
+};
+
+const getProducts = async (searchTerm: String) => {
+  let product = {};
+  if (searchTerm) {
+    product = { name: { $regex: searchTerm.trim(), $options: 'i' } }; // what if there is a mistaken space, so trim lagbe
   }
+  //console.log(product);
+
+  const result = await ProductModel.find(product);
+  return result;
 };
 
 export const ProductServices = {
   createProductIntoDB,
+  getProducts,
 };
