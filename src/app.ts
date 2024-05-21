@@ -1,12 +1,15 @@
 import cors from 'cors';
 import express, { Request, Response } from 'express';
+import { ProductRoutes } from './modules/products/product.route';
 const app = express();
-const port = 3000;
 
 ///its a parser
 
 app.use(express.json());
 app.use(cors());
+
+///application routes
+app.use('/', ProductRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
