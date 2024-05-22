@@ -17,21 +17,25 @@ const CreateOrder = async (req: Request, res: Response) => {
     /// inventory exists kore kina age check
     if (
       Product?.inventory &&
-      Product?.inventory.quantity <= OrderData.quantity
+      Product?.inventory.quantity < OrderData.quantity
     ) {
-      res.status(500).json({
+      return res.status(500).json({
         success: false,
         message: 'Insufficient quantity available in inventory',
       });
     }
 
-    const { value: JoiParsedData, error } = orderJoiSchema.validate(OrderData);
+    const { value: JoiParsedData } = orderJoiSchema.validate(OrderData);
 
     ///quantity decreasing after order, also update
     const result = await OrderServices.CreateOrderintoDb(JoiParsedData);
     if (Product && Product.inventory && Product.inventory.quantity) {
       const StockOut = OrderData.quantity;
-      Product.inventory.quantity = Product.inventory.quantity - StockOut;
+      Product.inventory.quantity = Math.max(
+        Product.inventory.quantity - StockOut,
+        0,
+      ); // negative e jacchilo, cannot be less than 0
+
       await Product.save();
       if (Product?.inventory.quantity == 0) {
         Product.inventory.inStock = false;
@@ -41,15 +45,15 @@ const CreateOrder = async (req: Request, res: Response) => {
     //send response
     res.status(200).json({
       success: true,
-      message: 'Order is created successfully',
+      message: 'Order created successfully!',
       data: result,
     });
-  } catch (error: any) {
+  } catch (err: unknown) {
     console.log('check');
     res.status(500).json({
       success: false,
       message: 'failed to create Order',
-      error: error.message,
+      error: err,
     });
   }
 };
@@ -57,27 +61,35 @@ const CreateOrder = async (req: Request, res: Response) => {
 const GetOrders = async (req: Request, res: Response) => {
   try {
     const email = req.query.email;
-    console.log(email);
-    console.log('asfasfsaf');
+    //console.log(email);
+    //console.log('asfasfsaf');
     const result = await OrderServices.getOrders(email as string);
 
     if (email) {
-      res.status(200).json({
-        success: true,
-        message: `Orders fetched successfully for user email!`,
-        data: result,
-      });
+      if (result.length > 0) {
+        res.status(200).json({
+          success: true,
+          message: `Orders fetched successfully for user email!`,
+          data: result,
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          message: 'Order not found',
+        });
+      }
     } else {
       res.status(200).json({
         success: true,
-        message: 'Orders fetched succesfully',
+        message: 'Orders fetched succesfully!',
         data: result,
       });
     }
-  } catch (err) {
+  } catch (err: unknown) {
     res.status(500).json({
       success: false,
-      message: err,
+      message: 'Order not found or could not created!',
+      error: err,
     });
   }
 };

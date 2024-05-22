@@ -2,15 +2,11 @@ import { Orders } from './order.interface';
 import { OrderModel } from './order.model';
 
 const CreateOrderintoDb = async (OrderData: Orders) => {
-  try {
-    const result = await OrderModel.create(OrderData);
-    return result;
-  } catch (err) {
-    throw err;
-  }
+  const result = await OrderModel.create(OrderData);
+  return result;
 };
 
-const getOrders = async (email: String) => {
+const getOrders = async (email: string) => {
   let order = {};
   if (email) {
     //console.log('asche yes');

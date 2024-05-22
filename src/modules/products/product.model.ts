@@ -42,7 +42,7 @@ const productSchema = new Schema<Product>({
     required: true,
   },
 
-  variant: {
+  variants: {
     type: [variantSchema],
     required: true,
   },

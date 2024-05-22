@@ -1,4 +1,4 @@
-export type Variant = {
+export type Variants = {
   type: string;
   value: string;
 };
@@ -14,6 +14,6 @@ export type Product = {
   price: number;
   category: string;
   tags: string[];
-  variant: Variant[];
+  variants: Variants[];
   inventory: Inventory;
 };

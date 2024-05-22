@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { ProductServices } from './product.service';
 import productJoiSchema from './product.validationJoi';
-import { isValidObjectId } from 'mongoose';
 
 const CreateProduct = async (req: Request, res: Response) => {
   try {
@@ -16,15 +15,15 @@ const CreateProduct = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      message: 'product is created successfully',
+      message: 'Product created successfully!',
       data: result,
     });
-  } catch (error: any) {
-    console.log('ahare');
+  } catch (err: unknown) {
+    //console.log('ahare');
     res.status(500).json({
       success: false,
-      message: 'failed to create student',
-      error: error.message,
+      message: 'failed to create product',
+      error: err,
     });
   }
 };
@@ -33,24 +32,31 @@ const GetProducts = async (req: Request, res: Response) => {
   try {
     const searchTerm = req.query.searchTerm;
     const result = await ProductServices.getProducts(searchTerm as string);
+    //console.log(result.length);
 
-    if (searchTerm) {
+    if (searchTerm && result.length > 0) {
       res.status(200).json({
         success: true,
         message: `Products matching search term '${searchTerm}'  fetched successfully!`,
         data: result,
       });
-    } else {
-      res.status(200).json({
+    } else if (result.length > 0) {
+      res.status(500).json({
         success: true,
-        message: 'products fetched succesfully',
+        message: 'Products fetched successfully!',
         data: result,
       });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'Products could not be fetched or no items like this!',
+      });
     }
-  } catch (err) {
+  } catch (err: unknown) {
     res.status(500).json({
       success: false,
-      message: err,
+      message: 'Products could not be fetched!!!',
+      error: err,
     });
   }
 };
@@ -60,16 +66,17 @@ const GetSingleProduct = async (req: Request, res: Response) => {
     const result = await ProductServices.findSingleProductById(
       req.params.productId.trim(),
     );
-    console.log(result);
+    ////console.log(result);
     res.status(200).json({
       success: true,
-      message: 'product fetched succesfully',
+      message: 'Product fetched successfully!',
       data: result,
     });
-  } catch (err) {
+  } catch (err: unknown) {
     res.status(500).json({
       success: false,
       message: 'There is no product with this id',
+      error: err,
     });
   }
 };
@@ -81,16 +88,18 @@ const UpdateSingleProduct = async (req: Request, res: Response) => {
       req.params.productId.trim(),
       JoiParsedData,
     );
-    console.log(result);
+    // console.log(result);
     res.status(200).json({
       success: true,
-      message: 'product updated succesfully',
-      data: result,
+      message: 'product updated succesfully!',
+      data: updatedData,
     });
-  } catch (err) {
+  } catch (err: unknown) {
     res.status(500).json({
       success: false,
-      message: 'There is no product with this id',
+      message:
+        'There is no product with this id or product could not be updated',
+      errro: err,
     });
   }
 };
@@ -100,16 +109,23 @@ const deleteProductFromDb = async (req: Request, res: Response) => {
     const result = await ProductServices.deleteProduct(
       req.params.productId.trim(),
     );
-    res.status(200).json({
-      success: true,
-      message: 'Product deleted successfully!',
-      data: result,
-    });
-  } catch (err: any) {
-    console.log(err);
+    if (result.deletedCount > 0) {
+      res.status(200).json({
+        success: true,
+        message: 'Product deleted successfully!',
+        data: null,
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'Product Could not be deleted or no product exists like this!',
+      });
+    }
+  } catch (err: unknown) {
+    //console.log(err);
     res.status(500).json({
       success: false,
-      message: err.message || 'Product Could not be deleted',
+      message: 'Product Could not be deleted',
       error: err,
     });
   }

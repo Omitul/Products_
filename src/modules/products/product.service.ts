@@ -6,7 +6,7 @@ const createProductIntoDB = async (productData: Product) => {
   return result;
 };
 
-const getProducts = async (searchTerm: String) => {
+const getProducts = async (searchTerm: string) => {
   let product = {};
   if (searchTerm) {
     product = { name: { $regex: searchTerm.trim(), $options: 'i' } }; // what if there is a mistaken space, so trim lagbe
@@ -19,35 +19,23 @@ const getProducts = async (searchTerm: String) => {
 
 const findSingleProductById = async (ProductId: string) => {
   console.log(ProductId);
-  try {
-    const product = await ProductModel.findById(ProductId);
-    return product;
-  } catch (err) {
-    throw err;
-  }
+
+  const product = await ProductModel.findById(ProductId);
+  return product;
 };
 
 const updateProduct = async (ProductId: string, UpdatedData: JSON) => {
   console.log(ProductId);
-  try {
-    const product = await ProductModel.updateOne(
-      { _id: ProductId },
-      UpdatedData,
-    );
-    return product;
-  } catch (err) {
-    throw err;
-  }
+
+  const product = await ProductModel.updateOne({ _id: ProductId }, UpdatedData);
+  return product;
 };
 
 const deleteProduct = async (ProductId: string) => {
   console.log(ProductId);
-  try {
-    const product = await ProductModel.deleteOne({ _id: ProductId });
-    return product;
-  } catch (err) {
-    throw err;
-  }
+
+  const product = await ProductModel.deleteOne({ _id: ProductId });
+  return product;
 };
 
 export const ProductServices = {

@@ -16,7 +16,7 @@ const productJoiSchema = Joi.object({
   price: Joi.number().required(),
   category: Joi.string().required(),
   tags: Joi.array().items(Joi.string()).required(),
-  variant: Joi.array().items(variantJoiSchema).required(),
+  variants: Joi.array().items(variantJoiSchema).required(),
   inventory: inventoryJoiSchema.required(),
 });
 
