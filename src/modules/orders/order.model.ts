@@ -5,12 +5,12 @@ const orderschema = new Schema<Orders>({
   email: {
     type: String,
     required: true,
-    maxlength: 20,
+    maxlength: 40,
   },
-  ProductId: {
+  productId: {
     type: String,
     required: true,
-    maxlength: 20,
+    maxlength: 40,
   },
   price: {
     type: Number,

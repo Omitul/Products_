@@ -1,6 +1,5 @@
 import { Product } from './product.interface';
 import { ProductModel } from './product.model';
-import { ObjectId } from 'mongoose';
 
 const createProductIntoDB = async (productData: Product) => {
   const result = await ProductModel.create(productData);

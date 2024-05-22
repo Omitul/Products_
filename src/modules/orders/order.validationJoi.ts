@@ -1,8 +1,10 @@
 import Joi from 'joi';
 
-const productJoiSchema = Joi.object({
-  email: Joi.string().required().max(20),
-  productId: Joi.string().required().max(20),
+const orderJoiSchema = Joi.object({
+  email: Joi.string().required().max(40),
+  ProductId: Joi.string().required().max(40),
   price: Joi.string().required(),
   quantity: Joi.string().required(),
 });
+
+export default orderJoiSchema;
