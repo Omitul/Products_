@@ -7,9 +7,8 @@ const CreateProduct = async (req: Request, res: Response) => {
   try {
     const productData = req.body;
 
-    const { value: JoiParsedData, error } =
-      productJoiSchema.validate(productData);
-    console.log(error);
+    const { value: JoiParsedData } = productJoiSchema.validate(productData);
+    // console.log(error);
 
     const result = await ProductServices.createProductIntoDB(JoiParsedData);
 
@@ -77,9 +76,10 @@ const GetSingleProduct = async (req: Request, res: Response) => {
 const UpdateSingleProduct = async (req: Request, res: Response) => {
   try {
     const updatedData = req.body;
+    const { value: JoiParsedData } = productJoiSchema.validate(updatedData);
     const result = await ProductServices.updateProduct(
       req.params.productId.trim(),
-      updatedData,
+      JoiParsedData,
     );
     console.log(result);
     res.status(200).json({

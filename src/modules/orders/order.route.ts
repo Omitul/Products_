@@ -4,6 +4,6 @@ import { OrderController } from './order.controller';
 const router = express.Router();
 
 router.post('/api/orders', OrderController.CreateOrder);
-console.log('asche');
+router.get('/api/orders', OrderController.GetOrders);
 
 export const OrderRoutes = router;
