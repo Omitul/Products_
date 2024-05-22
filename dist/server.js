@@ -13,20 +13,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const config_1 = __importDefault(require("./app/config"));
+const mongoose_1 = __importDefault(require("mongoose"));
 const app_1 = __importDefault(require("./app"));
-const mongoose = require('mongoose');
+console.log('hello');
+console.log('DATABASE_URL:', config_1.default.database_url); // Add this line
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield mongoose.connect(config_1.default.database_url);
+            console.log('DATABASE_URL:', config_1.default.database_url); // Add this line
+            console.log('Connecting to MongoDB:', config_1.default.database_url);
+            yield mongoose_1.default.connect(config_1.default.database_url);
             app_1.default.listen(config_1.default.port, () => {
                 console.log(`Example app listening on port ${config_1.default.port}`);
             });
         }
         catch (err) {
-            console.log('gese');
-            console.log(err);
+            console.log('An error occurred:');
+            console.error(err);
         }
-        // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
     });
 }
+main();

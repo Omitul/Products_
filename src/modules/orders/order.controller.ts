@@ -50,7 +50,7 @@ const CreateOrder = async (req: Request, res: Response) => {
     });
   } catch (err: unknown) {
     console.log('check');
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: 'failed to create Order',
       error: err,

@@ -1,5 +1,12 @@
-import { Schema, model } from 'mongoose';
-import { Orders } from './order.interface';
+import { Schema, model, Document } from 'mongoose';
+//import { Orders } from './order.interface';
+
+export interface Orders extends Document {
+  email: string;
+  productId: string;
+  price: number;
+  quantity: number;
+}
 
 const orderschema = new Schema<Orders>({
   email: {
