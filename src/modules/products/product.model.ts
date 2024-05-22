@@ -49,6 +49,19 @@ const productSchema = new Schema<Product>({
     type: inventorySchema,
     required: true,
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+productSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+productSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { $isDeleted: { $ne: true } } });
+  next();
 });
 
 export const ProductModel = model<Product>(

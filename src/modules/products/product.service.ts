@@ -28,7 +28,7 @@ const findSingleProductById = async (ProductId: string) => {
   }
 };
 
-const updateProduct = async (ProductId: string, UpdatedData: any) => {
+const updateProduct = async (ProductId: string, UpdatedData: JSON) => {
   console.log(ProductId);
   try {
     const product = await ProductModel.updateOne(
@@ -41,9 +41,20 @@ const updateProduct = async (ProductId: string, UpdatedData: any) => {
   }
 };
 
+const deleteProduct = async (ProductId: string) => {
+  console.log(ProductId);
+  try {
+    const product = await ProductModel.deleteOne({ _id: ProductId });
+    return product;
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const ProductServices = {
   createProductIntoDB,
   getProducts,
   findSingleProductById,
   updateProduct,
+  deleteProduct,
 };
