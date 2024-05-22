@@ -21,6 +21,7 @@ const productSchema = new Schema<Product>({
   name: {
     type: String,
     required: true,
+    unique: true,
     maxlength: 100,
   },
   description: {
