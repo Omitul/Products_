@@ -88,12 +88,20 @@ const UpdateSingleProduct = async (req: Request, res: Response) => {
       req.params.productId.trim(),
       JoiParsedData,
     );
-    // console.log(result);
-    res.status(200).json({
-      success: true,
-      message: 'product updated succesfully!',
-      data: updatedData,
-    });
+    /////console.log(result);
+    if (result.modifiedCount > 0) {
+      res.status(200).json({
+        success: true,
+        message: 'product updated succesfully!',
+        data: updatedData,
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message:
+          'There is no product with this id or product could not be updated',
+      });
+    }
   } catch (err: unknown) {
     res.status(500).json({
       success: false,
