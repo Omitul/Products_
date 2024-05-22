@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { ProductServices } from './product.service';
 import productJoiSchema from './product.validationJoi';
+import { isValidObjectId } from 'mongoose';
 
 const CreateProduct = async (req: Request, res: Response) => {
   try {
@@ -55,7 +56,48 @@ const GetProducts = async (req: Request, res: Response) => {
   }
 };
 
+const GetSingleProduct = async (req: Request, res: Response) => {
+  try {
+    const result = await ProductServices.findSingleProductById(
+      req.params.productId.trim(),
+    );
+    console.log(result);
+    res.status(200).json({
+      success: true,
+      message: 'product fetched succesfully',
+      data: result,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: 'There is no product with this id',
+    });
+  }
+};
+const UpdateSingleProduct = async (req: Request, res: Response) => {
+  try {
+    const updatedData = req.body;
+    const result = await ProductServices.updateProduct(
+      req.params.productId.trim(),
+      updatedData,
+    );
+    console.log(result);
+    res.status(200).json({
+      success: true,
+      message: 'product updated succesfully',
+      data: result,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: 'There is no product with this id',
+    });
+  }
+};
+
 export const ProductController = {
   CreateProduct,
   GetProducts,
+  GetSingleProduct,
+  UpdateSingleProduct,
 };
